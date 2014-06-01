@@ -16,6 +16,7 @@ set(yakuake_SRCS
     config/windowsettings.cpp
     config/appearancesettings.cpp
     config/skinlistdelegate.cpp
+    config/autostartsettings.cpp
 )
 
 kde4_add_kcfg_files(yakuake_SRCS config/settings.kcfgc)
@@ -25,6 +26,7 @@ kde4_add_ui_files(yakuake_SRCS
     config/windowsettings.ui
     config/behaviorsettings.ui
     config/appearancesettings.ui
+    config/autostartsettings.ui
 )
 
 kde4_add_app_icon(yakuake_SRCS "icons/hi*-app-yakuake.png")

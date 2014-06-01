@@ -37,7 +37,7 @@ int main (int argc, char *argv[])
         "2.9.9+",
         ki18nc("@title", "A drop-down terminal emulator based on KDE Konsole technology."),
         KAboutData::License_GPL,
-        ki18nc("@info:credit", "(c) 2008-2012 The Yakuake Team"),
+        ki18nc("@info:credit", "(c) 2008-2014 The Yakuake Team"),
         ki18n(0),
         "http://yakuake.kde.org/");
 
@@ -47,6 +47,8 @@ int main (int argc, char *argv[])
         ki18nc("@info:credit", "Maintainer, Lead Developer"), "hein@kde.org");
     aboutData.addAuthor(ki18nc("@info:credit", "Francois Chazal"),
         ki18nc("@info:credit", "Project Founder, Default skin (Inactive)"));
+    aboutData.addCredit(ki18nc("@info:credit", "Igor Duarte Cardoso"),
+        ki18nc("@info:credit", "Auto-spawning of sessions/terminals on startup"), "igordcard@gmail.com");
     aboutData.addCredit(ki18nc("@info:credit", "Daniel 'suslik' D."),
         ki18nc("@info:credit", "Plastik skin"), "dd@accentsolution.com");
     aboutData.addCredit(ki18nc("@info:credit", "Juan Carlos Torres"),

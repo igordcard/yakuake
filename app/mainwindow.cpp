@@ -25,6 +25,7 @@
 #include "settings.h"
 #include "config/appearancesettings.h"
 #include "config/windowsettings.h"
+#include "config/autostartsettings.h"
 #include "firstrundialog.h"
 #include "sessionstack.h"
 #include "skin.h"
@@ -32,6 +33,7 @@
 #include "terminal.h"
 #include "titlebar.h"
 #include "ui_behaviorsettings.h"
+#include "ui_autostartsettings.h"
 
 #include <KApplication>
 #include <KConfigDialog>
@@ -107,7 +109,14 @@ MainWindow::MainWindow(QWidget* parent)
 
     applySettings();
 
-    m_sessionStack->addSession();
+    QStringList sessions = Settings::sessionList();
+    if(sessions.isEmpty())
+        m_sessionStack->addSession();
+    else
+    {
+        foreach (const QString &str, sessions)
+            m_sessionStack->addSession(str);
+    }
 
     if (Settings::firstRun())
     {
@@ -707,6 +716,10 @@ void MainWindow::configureApp()
     connect(appearanceSettings, SIGNAL(settingsChanged()), this, SLOT(applySettings()));
     connect(settingsDialog, SIGNAL(closeClicked()), appearanceSettings, SLOT(resetSelection()));
     connect(settingsDialog, SIGNAL(cancelClicked()), appearanceSettings, SLOT(resetSelection()));
+    
+    AutostartSettings* autostartSettings = new AutostartSettings(settingsDialog);
+    settingsDialog->addPage(autostartSettings, i18nc("@title Preferences page name", "Autostart"),
+        "preferences-other");
 
     settingsDialog->button(KDialog::Help)->hide();
 

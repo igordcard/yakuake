@@ -44,7 +44,7 @@ SessionStack::~SessionStack()
 {
 }
 
-int SessionStack::addSession(Session::SessionType type)
+int SessionStack::addSession(Session::SessionType type, const QString& customTitle)
 {
     Session* session = new Session(type, this);
     connect(session, SIGNAL(titleChanged(int,QString)), this, SIGNAL(titleChanged(int,QString)));
@@ -62,9 +62,14 @@ int SessionStack::addSession(Session::SessionType type)
     if (Settings::dynamicTabTitles())
         emit sessionAdded(session->id(), session->title());
     else
-        emit sessionAdded(session->id());
+        emit sessionAdded(session->id(), customTitle);
 
     return session->id();
+}
+
+int SessionStack::addSession(const QString& customTitle)
+{
+    return addSession(Session::Single, customTitle);
 }
 
 int SessionStack::addSessionTwoHorizontal()

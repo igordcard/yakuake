@@ -184,4 +184,10 @@
       <default>true</default>
     </entry>
   </group>
+  <group name="Autostart">
+    <entry name="SessionList" type="StringList">
+      <label context="@label">What sessions to spawn</label>
+      <whatsthis context="@info:whatsthis">What sessions should Yakuake spawn when it starts up.</whatsthis>
+    </entry>
+  </group>
 </kcfg>
