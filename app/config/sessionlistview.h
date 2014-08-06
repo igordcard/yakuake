@@ -1,5 +1,4 @@
 /*
-  Copyright (C) 2008-2009 by Eike Hein <hein@kde.org>
   Copyright (C) 2014 by Igor Duarte Cardoso <igordcard@gmail.com>
 
   This program is free software; you can redistribute it and/or
@@ -19,38 +18,31 @@
   along with this program. If not, see http://www.gnu.org/licenses/.
 */
 
+#ifndef SESSIONLISTVIEW_H
+#define SESSIONLISTVIEW_H
 
-#ifndef APPLICATION_H
-#define APPLICATION_H
+#include <QTreeWidget>
+#include <QDropEvent>
 
-#include "config/preferences.h"
-
-#include <KUniqueApplication>
-
-
-class MainWindow;
-
-
-class Application : public KUniqueApplication
+class SessionListView : public QTreeWidget
 {
     Q_OBJECT
-
+    
     public:
-        explicit Application();
-        virtual ~Application();
-
-        virtual int newInstance();
-
-    signals:
-        void sessionsChanged(const Yakuake::SessionSettingsPtr session);
-        void appearanceChanged();
-
-    public slots:
-        void readOptions();
-        void saveOptions(bool updateGUI=true);
+        explicit SessionListView(QWidget *parent);
+        ~SessionListView();
 
     private:
-        MainWindow* m_mainWindow;
+        bool badDropSelection();
+    signals:
+        void moved();
+        void aboutToMove();
+        
+    protected:        
+        void dragMoveEvent(QDragMoveEvent *e);
+        void dragLeaveEvent(QDragLeaveEvent *);
+        void dragEnterEvent(QDragEnterEvent *);
+        void dropEvent(QDropEvent *event);
 };
 
 #endif

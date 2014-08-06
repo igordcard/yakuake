@@ -17,6 +17,13 @@ set(yakuake_SRCS
     config/appearancesettings.cpp
     config/skinlistdelegate.cpp
     config/autostartsettings.cpp
+    config/sessionlistview.cpp
+    config/sessioneditdialog.cpp
+    config/sessionsettings.cpp
+    config/terminalsettings.cpp
+    config/connectionsettings.cpp
+    config/common.cpp
+    config/preferences.cpp
 )
 
 kde4_add_kcfg_files(yakuake_SRCS config/settings.kcfgc)
@@ -27,6 +34,8 @@ kde4_add_ui_files(yakuake_SRCS
     config/behaviorsettings.ui
     config/appearancesettings.ui
     config/autostartsettings.ui
+    config/sessioneditdialog.ui
+    config/terminaleditdialog.ui
 )
 
 kde4_add_app_icon(yakuake_SRCS "icons/hi*-app-yakuake.png")

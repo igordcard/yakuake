@@ -1,3 +1,6 @@
+Changes in unmerged igordcard fork from master 2.9.9+ (20140530):
+* Autostart of named session, configurable via a new settings tab.
+
 Changes in 2.9.9:
 * Yakuake now sports a standard KDE "Configure Notifications..." item in
   its menu. The startup notification popup configuration has moved there,

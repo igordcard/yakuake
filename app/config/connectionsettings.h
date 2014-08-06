@@ -1,5 +1,4 @@
 /*
-  Copyright (C) 2008-2009 by Eike Hein <hein@kde.org>
   Copyright (C) 2014 by Igor Duarte Cardoso <igordcard@gmail.com>
 
   This program is free software; you can redistribute it and/or
@@ -19,38 +18,36 @@
   along with this program. If not, see http://www.gnu.org/licenses/.
 */
 
+#ifndef CONNECTIONSETTINGS_H
+#define CONNECTIONSETTINGS_H
 
-#ifndef APPLICATION_H
-#define APPLICATION_H
+#include "sessionsettings.h"
+#include "terminalsettings.h"
 
-#include "config/preferences.h"
-
-#include <KUniqueApplication>
-
-
-class MainWindow;
+#include <QString>
 
 
-class Application : public KUniqueApplication
+class ConnectionSettings
 {
-    Q_OBJECT
-
     public:
-        explicit Application();
-        virtual ~Application();
+        explicit ConnectionSettings();
+        ~ConnectionSettings();
 
-        virtual int newInstance();
+        bool isValid();
 
-    signals:
-        void sessionsChanged(const Yakuake::SessionSettingsPtr session);
-        void appearanceChanged();
+        QString name() const;
 
-    public slots:
-        void readOptions();
-        void saveOptions(bool updateGUI=true);
+        Yakuake::TerminalSettings terminal() const { return m_terminal; }
+        void setTerminal(Yakuake::TerminalSettings terminal) { m_terminal = terminal; }
+
+        Yakuake::SessionSettingsPtr session() const { return m_session; }
+        void setSession(Yakuake::SessionSettingsPtr session) { m_session = session; }
 
     private:
-        MainWindow* m_mainWindow;
+        Yakuake::TerminalSettings m_terminal;
+        Yakuake::SessionSettingsPtr m_session;
+
 };
+
 
 #endif

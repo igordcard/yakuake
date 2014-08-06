@@ -22,10 +22,11 @@
 
 #include "mainwindow.h"
 #include "application.h"
-#include "settings.h"
+#include "config/preferences.h"
 #include "config/appearancesettings.h"
 #include "config/windowsettings.h"
 #include "config/autostartsettings.h"
+//#include "config/terminalsettings.h"
 #include "firstrundialog.h"
 #include "sessionstack.h"
 #include "skin.h"
@@ -50,11 +51,14 @@
 #include <KActionCollection>
 #include <KWindowSystem>
 #include <KLocalizedString>
+#include <kdebug.h>
 
 #include <QDesktopWidget>
 #include <QPainter>
 #include <QWhatsThis>
 #include <QtDBus/QtDBus>
+
+#include <QString>
 
 #if defined(Q_WS_X11)
 #include <QX11Info>
@@ -109,13 +113,33 @@ MainWindow::MainWindow(QWidget* parent)
 
     applySettings();
 
-    QStringList sessions = Settings::sessionList();
-    if(sessions.isEmpty())
-        m_sessionStack->addSession();
-    else
+    Yakuake::SessionHash sessions = Preferences::sessionHash();
+    Yakuake::SessionSettingsPtr session;
+    QHashIterator<int, Yakuake::SessionSettingsPtr> its(sessions); // Session iterator.
+    int sessionId;
+    Yakuake::TerminalList terminalList;
+    Yakuake::TerminalList::iterator itt; // Terminal iterator.
+    int terminalId;
+
+    while(its.hasNext())
     {
-        foreach (const QString &str, sessions)
-            m_sessionStack->addSession(str);
+        its.next();
+        session = its.value();
+        sessionId = m_sessionStack->addSession(session->name());
+
+        terminalList = session->terminalList();
+        terminalId = 0;
+        m_sessionStack->runCommandInTerminal(terminalId, terminalList[terminalId].commands());
+        for(itt = ++terminalList.begin(); itt < terminalList.end(); ++itt) 
+        {
+            //TODO: use CONSTANTS for Split Way.
+            if((*itt).splitWay() == 0)
+                terminalId = m_sessionStack->splitTerminalLeftRight((*itt).neighbor());
+            else if((*itt).splitWay() == 1)
+                terminalId = m_sessionStack->splitTerminalTopBottom((*itt).neighbor());
+
+            m_sessionStack->runCommandInTerminal(terminalId, (*itt).commands());
+        }
     }
 
     if (Settings::firstRun())
@@ -717,7 +741,7 @@ void MainWindow::configureApp()
     connect(settingsDialog, SIGNAL(closeClicked()), appearanceSettings, SLOT(resetSelection()));
     connect(settingsDialog, SIGNAL(cancelClicked()), appearanceSettings, SLOT(resetSelection()));
     
-    AutostartSettings* autostartSettings = new AutostartSettings(settingsDialog);
+    Yakuake::AutostartSettings* autostartSettings = new Yakuake::AutostartSettings(settingsDialog);
     settingsDialog->addPage(autostartSettings, i18nc("@title Preferences page name", "Autostart"),
         "preferences-other");
 

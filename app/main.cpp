@@ -48,7 +48,7 @@ int main (int argc, char *argv[])
     aboutData.addAuthor(ki18nc("@info:credit", "Francois Chazal"),
         ki18nc("@info:credit", "Project Founder, Default skin (Inactive)"));
     aboutData.addCredit(ki18nc("@info:credit", "Igor Duarte Cardoso"),
-        ki18nc("@info:credit", "Auto-spawning of sessions/terminals on startup"), "igordcard@gmail.com");
+        ki18nc("@info:credit", "Auto-spawning of sessions and terminals on startup"), "igordcard@gmail.com");
     aboutData.addCredit(ki18nc("@info:credit", "Daniel 'suslik' D."),
         ki18nc("@info:credit", "Plastik skin"), "dd@accentsolution.com");
     aboutData.addCredit(ki18nc("@info:credit", "Juan Carlos Torres"),
