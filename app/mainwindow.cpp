@@ -26,7 +26,6 @@
 #include "config/appearancesettings.h"
 #include "config/windowsettings.h"
 #include "config/autostartsettings.h"
-//#include "config/terminalsettings.h"
 #include "firstrundialog.h"
 #include "sessionstack.h"
 #include "skin.h"
@@ -51,7 +50,6 @@
 #include <KActionCollection>
 #include <KWindowSystem>
 #include <KLocalizedString>
-#include <kdebug.h>
 
 #include <QDesktopWidget>
 #include <QPainter>
@@ -65,7 +63,6 @@
 
 #include <X11/Xlib.h>
 #endif
-
 
 MainWindow::MainWindow(QWidget* parent)
     : KMainWindow(parent, Qt::CustomizeWindowHint | Qt::FramelessWindowHint)
@@ -116,27 +113,30 @@ MainWindow::MainWindow(QWidget* parent)
     Yakuake::SessionHash sessions = Preferences::sessionHash();
     Yakuake::SessionSettingsPtr session;
     QHashIterator<int, Yakuake::SessionSettingsPtr> its(sessions); // Session iterator.
-    int sessionId;
     Yakuake::TerminalList terminalList;
     Yakuake::TerminalList::iterator itt; // Terminal iterator.
     int terminalId;
+    int firstTerminalId;
 
     while(its.hasNext())
     {
         its.next();
         session = its.value();
-        sessionId = m_sessionStack->addSession(session->name());
-
+        m_sessionStack->addSession(session->name());
         terminalList = session->terminalList();
-        terminalId = 0;
-        m_sessionStack->runCommandInTerminal(terminalId, terminalList[terminalId].commands());
+        terminalId = m_sessionStack->activeTerminalId();
+        firstTerminalId = terminalId;
+        m_sessionStack->runCommandInTerminal(terminalId, terminalList[0].commands());
+
         for(itt = ++terminalList.begin(); itt < terminalList.end(); ++itt) 
         {
-            //TODO: use CONSTANTS for Split Way.
-            if((*itt).splitWay() == 0)
-                terminalId = m_sessionStack->splitTerminalLeftRight((*itt).neighbor());
-            else if((*itt).splitWay() == 1)
-                terminalId = m_sessionStack->splitTerminalTopBottom((*itt).neighbor());
+            // TODO: use CONSTANTS for Split Way.
+            if((*itt).splitWay() == 0) {
+                terminalId = m_sessionStack->splitTerminalLeftRight(firstTerminalId + (*itt).neighbor());
+            }
+            else if((*itt).splitWay() == 1) {
+                terminalId = m_sessionStack->splitTerminalTopBottom(firstTerminalId + (*itt).neighbor());
+            }
 
             m_sessionStack->runCommandInTerminal(terminalId, (*itt).commands());
         }
