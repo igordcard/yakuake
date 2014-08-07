@@ -119,6 +119,7 @@ namespace Yakuake
     void SessionEditDialog::addTerminal()
     {
         QPointer<TerminalEditDialog> dlg = new TerminalEditDialog(i18n("Add Terminal"), this);
+        dlg->setTerminalNeighbors(m_terminalList);
 
         if(dlg->exec() == KDialog::Accepted)
         {
@@ -280,20 +281,28 @@ namespace Yakuake
         enableButtonOk( !text.isEmpty() );
     }
 
+    void TerminalEditDialog::setTerminalNeighbors(const TerminalList& terminals, int until)
+    {
+        int i;
+        until = (until < 0) ? terminals.size() : until;
+        for(i = 0; i < until; i++)
+        {
+            m_mainWidget->m_neighbor->addItem(terminals[i].name());
+        }
+        m_mainWidget->m_split->addItem(i18n("Left->Right"));
+        m_mainWidget->m_split->addItem(i18n("Top->Bottom"));
+    }
+
     // From TerminalSettings to UI
     //TODO: Protect against out of range manually hacked indices.
     void TerminalEditDialog::setTerminalSettings(const TerminalList& terminals, int index)
     {
         m_mainWidget->m_terminalName->setText(terminals[index].name());
         m_mainWidget->m_commands->setPlainText(terminals[index].commands());
-        int i;
-        for(i = 0; i < index; i++)
-        {
-            m_mainWidget->m_neighbor->addItem(terminals[i].name());
-        }
+
+        setTerminalNeighbors(terminals, index);
         m_mainWidget->m_neighbor->setCurrentIndex(terminals[index].neighbor());
-        m_mainWidget->m_split->addItem(i18n("Left->Right"));
-        m_mainWidget->m_split->addItem(i18n("Top->Bottom"));
+
         m_mainWidget->m_split->setCurrentIndex(terminals[index].splitWay());
     }
 

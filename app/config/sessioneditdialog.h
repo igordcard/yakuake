@@ -80,6 +80,7 @@ namespace Yakuake
             explicit TerminalEditDialog(const QString& title, QWidget *parent = 0);
             ~TerminalEditDialog();
 
+            void setTerminalNeighbors(const TerminalList& terminals, int until = -1);
             void setTerminalSettings(const TerminalList& terminals, int index);
             TerminalSettings terminalSettings();
 
